@@ -2,12 +2,20 @@
 
 var DEBUG = !!process.env.C9_PORT,
     express = require('express'),
-    log = require('./lib/log.js');
+    log = require('./lib/log.js'),
+    handlersPath = './lib/handlers/',
+    handlers = [
+        'clienthandler'
+        ];
 
-console.log("Start Test");
-log.debug("Starting... port: " + (process.env.PORT || process.env.C9_PORT));
+
+log.debug("Starting... port: %d" , (process.env.PORT || process.env.C9_PORT));
+
+
+
 
 var app = express.createServer();
+
 app.configure(function(){
     //app.use(express.methodOverride());
     //app.use(express.logger({ format: ':method :url' }));
@@ -28,6 +36,10 @@ app.configure(function(){
     if(DEBUG) app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
     else app.use(express.errorHandler());
 });
+
+for(var i=0;i<handlers.length;i++) {
+    require(handlersPath + handlers[i] + '.js')(app, log);
+}
 
 app.get('/', function(r,r2) {
     log.info('Test'); 

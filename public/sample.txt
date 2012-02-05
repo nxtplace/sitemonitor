@@ -1,0 +1,27 @@
+
+
+<script type="text/javascript">
+  var _dtq = _dtq || [];
+  (function() {
+    _dtq.push(['_setAccount', 'UA-866580-3']);
+    ///_dtq.push(['_trackPageview']);
+    _dtq.push(['_trackMoves']);
+    _dtq.push(['_trackClicks']);
+    _dtq.push(['start']);
+
+
+  })();
+  (function() {
+    if('https:' == document.location.protocol) {
+        //currently there is no ssl support
+        return;
+    }
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; 
+    ga.async = true; 
+    ga.src = 'http://sitemonitor.nxtplace.c9.io/client.js?modules=jquery';
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
