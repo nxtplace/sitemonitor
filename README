@@ -1,5 +1,20 @@
 
 
 Dependencies:
- express@2.5.6
+ express@2.5.6+
+ socket.io@0.8.7+
 
+
+Application design:
+
+Basic script creates a session and captures the mouse movement/clicks/active_page 
+  this information is send to the app.
+ /---------\    /------\                           
+ | website |--->| APP  |                           
+ \---------/    \------/                           
+                     
+In the app we can select a session and launch the website in "admin" mode. This mode allows us to receive the stream of data
+  and follow the progress of the user.
+ /-----\    /---------\                           
+ | APP |--->| website |                           
+ \-----/    \---------/               
