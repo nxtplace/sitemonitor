@@ -1,7 +1,24 @@
 
 
 var DEBUG = !!process.env.C9_PORT,
-    globalConfig = {},
+    PROTOCOL_HTTP = 'http://',PROTOCOL_HTTPS = 'https://',
+    APP_PROTOCOL = PROTOCOL_HTTP,
+    APP_DOMAIN = 'sitemonitor.nxtplace.c9.io',
+    APP_PORT = 80,
+    APP_PATH_ROOT = '/',
+    IS_DEFAULT_PORT = (APP_PROTOCOL == PROTOCOL_HTTP && APP_PORT == 80) || (APP_PROTOCOL == PROTOCOL_HTTPS && APP_PORT == 443),
+    APP_DOMAIN_WITH_PORT = APP_DOMAIN +(IS_DEFAULT_PORT ? '' : (':'+ APP_PORT)),
+    globalConfig = {
+        site: {
+            protocol: APP_PROTOCOL,
+            domain: APP_DOMAIN,
+            domainWithPort: APP_DOMAIN_WITH_PORT,
+            port: APP_PORT,
+            root: APP_PATH_ROOT
+        },
+        siteRoot: APP_PROTOCOL + APP_DOMAIN_WITH_PORT + APP_PATH_ROOT,
+        apiEndpoint: APP_PROTOCOL + APP_DOMAIN_WITH_PORT + APP_PATH_ROOT + 'api/' 
+    },
     express = require('express'),
     connect = require('./node_modules/express/node_modules/connect/index.js'),
     parseCookie = connect.utils.parseCookie,
