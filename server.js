@@ -1,12 +1,21 @@
 
 
 var DEBUG = !!process.env.C9_PORT,
+    globalConfig = {},
     express = require('express'),
+    connect = require('./node_modules/express/node_modules/connect/index.js'),
+    parseCookie = connect.utils.parseCookie,
+    io = require('socket.io'),
     log = require('./lib/log.js'),
     handlersPath = './lib/handlers/',
     handlers = [
-        'clienthandler'
+        'clienthandler',
+        'api-store'
         ];
+        
+globalConfig.parseCookie = parseCookie;
+globalConfig.io = io;
+globalConfig.log = log; 
 
 
 log.debug("Starting... port: %d" , (process.env.PORT || process.env.C9_PORT));
@@ -15,6 +24,8 @@ log.debug("Starting... port: %d" , (process.env.PORT || process.env.C9_PORT));
 
 
 var app = express.createServer();
+globalConfig.app = app;
+
 
 app.configure(function(){
     //app.use(express.methodOverride());
@@ -28,6 +39,8 @@ app.configure(function(){
         secret: 'SiteMonitor2012',
         cookie: { path: '/', httpOnly: true, maxAge: 14400 * 1000 }
     }));
+         
+   // app.use(connect['conditional-get']);
     
     app.use(app.router);
         
@@ -36,9 +49,15 @@ app.configure(function(){
     if(DEBUG) app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
     else app.use(express.errorHandler());
 });
+ 
+require('./lib/socketio/init.js')(globalConfig);
+
+
+
+
 
 for(var i=0;i<handlers.length;i++) {
-    require(handlersPath + handlers[i] + '.js')(app, log);
+    require(handlersPath + handlers[i] + '.js')(globalConfig,app, log);
 }
 
 app.get('/', function(r,r2) {
@@ -51,5 +70,4 @@ http.createServer(function(req, res) {
     res.end();
 }).listen(process.env.PORT || process.env.C9_PORT);
 */
-
 app.listen(process.env.PORT || process.env.C9_PORT);
